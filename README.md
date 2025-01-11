@@ -1,4 +1,5 @@
 # ClipReplace
+[![Test](https://github.com/l-lumin/clipreplace/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/l-lumin/clipreplace/actions/workflows/test.yml)
 
 **ClipReplace** is a simple command-line tool to replace a section of text in a file with clipboard content.
 
