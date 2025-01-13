@@ -8,7 +8,10 @@ logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 
 
 def clipreplace(
-    file_path: str, dry_run: bool = False, clipboard_content_override: list = None
+    file_path: str,
+    dry_run: bool = False,
+    clipboard_content_override: list = None,
+    create_backup: bool = True,
 ):
     file_path = Path(file_path)
     try:
@@ -47,13 +50,14 @@ def clipreplace(
         print("".join(updated_content))
         return
 
-    backup_path = file_path.with_suffix(file_path.suffix + ".bak")
-    try:
-        backup_path.write_text("".join(content))
-        logging.info(f"Backup file created: {backup_path}")
-    except Exception as e:
-        logging.error(f"Error creating backup file: {e}")
-        return
+    if create_backup:
+        backup_path = file_path.with_suffix(file_path.suffix + ".bak")
+        try:
+            backup_path.write_text("".join(content))
+            logging.info(f"Backup file created: {backup_path}")
+        except Exception as e:
+            logging.error(f"Error creating backup file: {e}")
+            return
 
     try:
         with file_path.open("w", encoding="utf-8") as file:
@@ -81,6 +85,9 @@ def main():
         "-c",
         help="Specify the content to replace with instead of clipboard content.",
     )
+    parser.add_argument(
+        "--no-backup", action="store_true", help="Do not create a backup file."
+    )
     args = parser.parse_args()
 
     clipboard_content_override = (
@@ -90,6 +97,7 @@ def main():
         args.file,
         dry_run=args.dry_run,
         clipboard_content_override=clipboard_content_override,
+        create_backup=not args.no_backup,
     )
 
 
