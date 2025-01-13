@@ -1,27 +1,30 @@
 import argparse
-import pyperclip
+import logging
 from pathlib import Path
+
+import pyperclip
+
+logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 
 
 def clipreplace(
     file_path: str, dry_run: bool = False, clipboard_content_override: list = None
 ):
     file_path = Path(file_path)
-    if not file_path.exists():
-        print("File not found.")
-        return
-
     try:
-        with file_path.open("r") as file:
+        with file_path.open("r", encoding="utf-8") as file:
             content = file.readlines()
+    except FileNotFoundError:
+        logging.error(f"File not found: {file_path}")
+        return None
     except Exception as e:
-        print(f"Error reading file: {e}")
+        logging.error(f"Error reading file: {e}")
         return
 
     clipboard_content = (
         clipboard_content_override or pyperclip.paste().strip().splitlines()
     )
-    if not clipboard_content:
+    if not clipboard_content and not clipboard_content_override:
         print("Clipboard is empty.")
         return
 
@@ -46,20 +49,19 @@ def clipreplace(
 
     backup_path = file_path.with_suffix(file_path.suffix + ".bak")
     try:
-        backup_path.write_text("".join(updated_content))
-        print(f"Backup file created: {backup_path}")
+        backup_path.write_text("".join(content))
+        logging.info(f"Backup file created: {backup_path}")
     except Exception as e:
-        print(f"Error creating backup file: {e}")
+        logging.error(f"Error creating backup file: {e}")
         return
 
     try:
-        with file_path.open("w") as file:
-            file.writelines(content)
+        with file_path.open("w", encoding="utf-8") as file:
+            file.writelines(updated_content)
+            logging.info(f"Content replaced in file: {file_path}")
     except Exception as e:
-        print(f"Error writing file: {e}")
+        logging.error(f"Error writing file: {e}")
         return
-    else:
-        print("Content replaced.")
 
 
 def main():
