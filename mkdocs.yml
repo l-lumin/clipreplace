@@ -1,0 +1,9 @@
+site_name: Clip Replace
+theme:
+  name: material
+  palette:
+    primary: indigo
+    accent: light blue
+  font:
+    text: 'Roboto'
+    code: 'Roboto Mono'
