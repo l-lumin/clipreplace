@@ -7,7 +7,7 @@ ClipReplace is a simple command-line tool to replace a section of text in a file
 - Replaces a sections of text in a file with content from your clipboard.
 - Supports creating backups of the file before making changes.
 - Provides a dry-run feature for previewing changes without modifying the file.
-- can override clipboard content with custom input.
+- Can override clipboard content with custom input.
 
 ## Installation
 
@@ -34,7 +34,7 @@ This will search for the first matching line in the file and replace that sectio
 
 | Option                        | Description                                             |
 | ----------------------------- | ------------------------------------------------------- |
-| `--file` or `f`               | Path to the file you want to modify                     |
+| `--file` or `-f`              | Path to the file you want to modify                     |
 | `--dry-run`                   | Preview the changes without modifying the file          |
 | `--clipboard-content` or `-c` | Specify custom content to replace the clipboard content |
 | `--no-backup`                 | Do not create a backup of the file                      |
